@@ -164,7 +164,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
             <div className="space-y-1">
               <p className="text-xs text-gray-500">Employee IDs: EMP001, EMP002, EMP003</p>
               <p className="text-xs text-gray-500">Password: Any 6+ characters</p>
-              <p className="text-xs text-gray-500">OTP: 123456</p>
+              <p className="text-xs text-gray-500">OTP: 1234</p>
             </div>
           </div>
         </div>

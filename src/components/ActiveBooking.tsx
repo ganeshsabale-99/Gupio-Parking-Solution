@@ -45,7 +45,7 @@ export const ActiveBooking: React.FC<ActiveBookingProps> = ({ booking, onCancel 
           <div className="space-y-1 text-sm text-gray-600">
             <div className="flex items-center">
               <Clock className="w-4 h-4 mr-1" />
-              <span>{formatDisplayDate(new Date(booking.bookingDate))} at {formatDisplayTime(booking.bookingTime)}</span>
+              <span>{formatDisplayDate(new Date(booking.bookingDate))} • {formatDisplayTime(booking.bookingTime)} - {booking.bookingEndTime ? formatDisplayTime(booking.bookingEndTime) : '—'}</span>
             </div>
             <p className="text-xs text-gray-500">
               Booked on {new Date(booking.bookedAt).toLocaleDateString()}

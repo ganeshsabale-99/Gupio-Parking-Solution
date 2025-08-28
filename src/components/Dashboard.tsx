@@ -127,11 +127,11 @@ export const Dashboard: React.FC<DashboardProps> = ({
   };
 
   // Handle booking confirmation
-  const handleBookingConfirm = (date: Date, time: string) => {
+  const handleBookingConfirm = (date: Date, startTime: string, endTime: string) => {
     if (!selectedSlot) return;
 
     const bookingDate = date.toISOString().split('T')[0];
-    const bookingTime = time;
+    const bookingTime = startTime;
 
     // Update slot status
     const updatedSlots = parkingSlots.map(slot =>
@@ -143,6 +143,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
             bookedAt: new Date().toISOString(),
             bookedDate: bookingDate,
             bookedTime: bookingTime,
+            bookedEndTime: endTime,
           }
         : slot
     );
@@ -156,6 +157,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
       section: selectedSlot.section,
       bookingDate,
       bookingTime,
+      bookingEndTime: endTime,
       status: 'active',
     };
 
@@ -168,7 +170,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
     setIsBookingModalOpen(false);
     setSelectedSlot(null);
-    toast.success(`${selectedSlot.id} booked for ${date.toLocaleDateString()} at ${time}`);
+    toast.success(`${selectedSlot.id} booked for ${date.toLocaleDateString()} ${startTime}-${endTime}`);
   };
 
   // Handle booking cancellation

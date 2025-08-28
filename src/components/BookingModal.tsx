@@ -9,7 +9,7 @@ interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
   slot: ParkingSlot | null;
-  onConfirm: (date: Date, time: string) => void;
+  onConfirm: (date: Date, startTime: string, endTime: string) => void;
   bookings: Booking[];
 }
 
@@ -23,10 +23,11 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const [isBooking, setIsBooking] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedTime, setSelectedTime] = useState('');
+  const [selectedStartTime, setSelectedStartTime] = useState('');
+  const [selectedEndTime, setSelectedEndTime] = useState('');
 
   const handleConfirm = async () => {
-    if (!selectedDate || !selectedTime) return;
+    if (!selectedDate || !selectedStartTime || !selectedEndTime) return;
     
     setIsBooking(true);
     
@@ -39,13 +40,14 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     // Show success for a moment then confirm
     setTimeout(() => {
       setIsSuccess(false);
-      onConfirm(selectedDate, selectedTime);
+      onConfirm(selectedDate, selectedStartTime, selectedEndTime);
     }, 1500);
   };
 
   const handleClose = () => {
     setSelectedDate(null);
-    setSelectedTime('');
+    setSelectedStartTime('');
+    setSelectedEndTime('');
     setIsBooking(false);
     setIsSuccess(false);
     onClose();
@@ -124,9 +126,17 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                   {/* Date Time Picker */}
                   <DateTimePicker
                     selectedDate={selectedDate}
-                    selectedTime={selectedTime}
+                    selectedStartTime={selectedStartTime}
+                    selectedEndTime={selectedEndTime}
                     onDateChange={setSelectedDate}
-                    onTimeChange={setSelectedTime}
+                    onStartTimeChange={(t) => {
+                      setSelectedStartTime(t);
+                      // reset end time if it is before/equal start
+                      if (!selectedEndTime || selectedEndTime <= t) {
+                        setSelectedEndTime('');
+                      }
+                    }}
+                    onEndTimeChange={setSelectedEndTime}
                     bookings={bookings}
                     slotId={slot.id}
                   />
@@ -144,7 +154,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleConfirm}
-                    disabled={!selectedDate || !selectedTime}
+                    disabled={!selectedDate || !selectedStartTime || !selectedEndTime}
                     className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
                   >
                     Confirm Booking
@@ -164,10 +174,10 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 <p className="text-gray-600">
                   Please wait while we confirm your parking spot.
                 </p>
-                {selectedDate && selectedTime && (
+                {selectedDate && selectedStartTime && selectedEndTime && (
                   <div className="mt-4 p-3 bg-blue-50 rounded-lg">
                     <p className="text-sm text-blue-800">
-                      <strong>{slot.id}</strong> for {formatDisplayDate(selectedDate)} at {formatDisplayTime(selectedTime)}
+                      <strong>{slot.id}</strong> for {formatDisplayDate(selectedDate)} from {formatDisplayTime(selectedStartTime)} to {formatDisplayTime(selectedEndTime)}
                     </p>
                   </div>
                 )}
@@ -188,11 +198,11 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 <p className="text-gray-600">
                   Your parking spot {slot.id} has been successfully reserved.
                 </p>
-                {selectedDate && selectedTime && (
+                {selectedDate && selectedStartTime && selectedEndTime && (
                   <div className="p-4 bg-green-50 rounded-lg">
                     <p className="text-sm text-green-800">
                       <strong>Date:</strong> {formatDisplayDate(selectedDate)}<br />
-                      <strong>Time:</strong> {formatDisplayTime(selectedTime)}
+                      <strong>Time:</strong> {formatDisplayTime(selectedStartTime)} - {formatDisplayTime(selectedEndTime)}
                     </p>
                   </div>
                 )}
