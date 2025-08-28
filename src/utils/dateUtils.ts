@@ -1,4 +1,5 @@
-import { format, addDays, isAfter, isBefore, startOfDay, parse } from 'date-fns';
+import { format, addDays, isBefore, parse } from 'date-fns';
+import type { Booking } from '../types';
 
 export const formatDate = (date: Date): string => {
   return format(date, 'yyyy-MM-dd');

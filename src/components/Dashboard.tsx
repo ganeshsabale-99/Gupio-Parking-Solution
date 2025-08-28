@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { ParkingSlot, User, Booking } from '../types';
 import { useGreeting } from '../hooks/useGreeting';
+import { formatDate } from '../utils/dateUtils';
 import { useInactivityTimer } from '../hooks/useInactivityTimer';
 import { StatCard } from './StatCard';
 import { ParkingSlot as ParkingSlotComponent } from './ParkingSlot';
@@ -130,7 +131,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
   const handleBookingConfirm = (date: Date, startTime: string, endTime: string) => {
     if (!selectedSlot) return;
 
-    const bookingDate = date.toISOString().split('T')[0];
+    const bookingDate = formatDate(date);
     const bookingTime = startTime;
 
     // Update slot status

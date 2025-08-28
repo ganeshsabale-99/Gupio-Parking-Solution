@@ -28,15 +28,15 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
   const handleConfirm = async () => {
     if (!selectedDate || !selectedStartTime || !selectedEndTime) return;
-    
+
     setIsBooking(true);
-    
+
     // Simulate booking process
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
+
     setIsBooking(false);
     setIsSuccess(true);
-    
+
     // Show success for a moment then confirm
     setTimeout(() => {
       setIsSuccess(false);
@@ -95,7 +95,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                       <Car className="w-12 h-12 text-green-600" />
                     </div>
                   </div>
-                  
+
                   <div className="text-center mb-4">
                     <p className="text-lg font-semibold text-green-600 mb-2">
                       ✅ Available
@@ -150,7 +150,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                   >
                     Cancel
                   </button>
-                  <motion.button
+                  {/* <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleConfirm}
@@ -158,7 +158,21 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
                   >
                     Confirm Booking
+                  </motion.button> */}
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleConfirm}
+                    disabled={!selectedDate || !selectedStartTime || !selectedEndTime}
+                    className={`flex-1 px-4 py-3 rounded-lg font-medium transition-colors
+    ${!selectedDate || !selectedStartTime || !selectedEndTime
+                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        : "bg-blue-600 text-white hover:bg-blue-700"}
+  `}
+                  >
+                    Confirm Booking
                   </motion.button>
+
                 </div>
               </>
             ) : isBooking ? (
